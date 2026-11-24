@@ -28,3 +28,8 @@ CNAME                 独自ドメイン設定(wakapanda.com)
 1. GitHubリポジトリの Settings → Pages → Branch を `main` / `(root)` にして保存
 2. Settings → Pages → Custom domain に `wakapanda.com` を入力し、「Enforce HTTPS」にチェック
 3. お名前.comのDNS設定は `Desktop/secretary/wakapanda/サイト公開手順.md` を参照
+
+## ページを作り直したら(2026-11-25)
+
+- `scripts/build_*.py` でページを作り直したあとは、`python3 scripts/stamp_assets.py` を実行する(CSS・JSの読み込みに版番号を付け、スマホが古い見た目を覚えたままになるのを防ぐ)
+- 毎朝の自動更新(`scripts/update_archive.py`)は最後に自動で実行する

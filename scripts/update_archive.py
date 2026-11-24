@@ -46,7 +46,8 @@ PANDA_KEYWORDS = {
 }
 # アーカイブを使うページ(順番どおりに作り直す)
 BUILDS = ["build_archive.py", "build_panda_pages.py", "build_fuuhin_story.py",
-          "build_calendar.py", "build_highlights.py"]
+          "build_calendar.py", "build_highlights.py",
+          "stamp_assets.py"]  # 最後に CSS・JS の版番号を付け直す
 
 
 def length_seconds(video_id: str) -> int:
