@@ -922,12 +922,16 @@ html { scroll-padding-top: 84px; }
    clip は hidden とちがい、上に貼りつくヘッダー(sticky)をこわさない */
 html, body { overflow-x: clip; }
 
-/* ===== ロゴの右のYouTubeアイコン(2026-11-25 えいじさん) ===== */
+/* ===== ロゴの右のチャンネルアイコン(押すとYouTube)(2026-11-25 えいじさん) ===== */
 .brand-wrap { display: inline-flex; align-items: center; gap: 2px; }
 .yt-link {
   display: inline-flex; align-items: center; justify-content: center;
   padding: 10px 8px; margin: -10px 0; border-radius: 10px; line-height: 0;
 }
-.yt-link svg { transition: transform .15s ease; }
-.yt-link:hover svg { transform: scale(1.08); }
+.yt-link img {
+  width: 34px; height: 34px; border-radius: 50%; object-fit: cover; display: block;
+  border: 2px solid var(--kami-light, #FFFBF2); box-shadow: 0 0 0 1px rgba(43, 38, 32, .18);
+  transition: transform .15s ease;
+}
+.yt-link:hover img { transform: scale(1.08); }
 .yt-link:focus-visible { outline: 2px solid var(--kaede); outline-offset: 2px; }
