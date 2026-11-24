@@ -6,6 +6,7 @@ GitHub Actions が毎日実行する。手元でも `python3 scripts/update_vide
   ・ショートかどうかを "short" に記録(RSSのリンクが /shorts/ ならショート)
   ・前回までのリストと合わせて、横の動画は新しい12本・ショートは新しい6本を残す(横がたまっていく)
 """
+import datetime as dt
 import json
 import urllib.error
 import urllib.parse
@@ -52,7 +53,9 @@ def main() -> None:
         link = entry.find("atom:link", NS)
         href = link.get("href", "") if link is not None else ""
         if video_id and title:
-            videos.append({"id": video_id, "title": title, "published": published[:10],
+            # 日本時間の日付にする(朝8時公開だと世界標準時では前の日になるため・2026-11-25)
+            pub_jst = dt.datetime.fromisoformat(published).astimezone(dt.timezone(dt.timedelta(hours=9))).strftime("%Y-%m-%d") if published else ""
+            videos.append({"id": video_id, "title": title, "published": pub_jst,
                            "short": "/shorts/" in href})
 
     if not videos:

@@ -15,6 +15,7 @@ from collections import defaultdict
 
 BASE = Path(__file__).parent.parent
 ARCHIVE = BASE / "data" / "archive.json"
+LAST_DAY = "2025-06-28"  # 楓浜・良浜・結浜・彩浜が中国へ帰った日
 OUT = BASE / "kinenbi-calendar.html"
 
 MONTH_NAMES = [f"{m}月" for m in range(1, 13)]
@@ -25,7 +26,7 @@ HEAD = """<!DOCTYPE html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>記念日カレンダー | 浜家の思い出、ぜんぶここに。</title>
-<meta name="description" content="「今日は何年前のこの日」浜家の動画を、月日ごとに振り返るカレンダーです。撮影日つきで338日ぶん収録。">
+<meta name="description" content="「今日は何年前のこの日」浜家の動画を、月日ごとに振り返るカレンダーです。撮影日つきで{days}日ぶん収録。">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#128060;</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -51,7 +52,7 @@ HEAD = """<!DOCTYPE html>
       <h1 class="hero-title">記念日<br><em>カレンダー</em></h1>
       <p class="hero-lead">
         「今日は何年前のこの日」。撮影日(なければ公開日)を頼りに、365日ぶん束ねました。
-        338日ぶん、浜家のその日があります。
+        {days}日ぶん、浜家のその日があります。
       </p>
     </div>
   </section>
@@ -110,7 +111,8 @@ def format_views(n):
 
 
 def day_html(mm, dd, videos):
-    videos = sorted(videos, key=lambda v: -v["views"])
+    # 代表は「撮影日つき」を先に・その中で再生回数の多い順(2026-11-25 Fable検品)
+    videos = sorted(videos, key=lambda v: (0 if v["shootDate"] else 1, -v["views"]))
     top = videos[0]
     date_str = top["shootDate"] or top["publishDate"]
     year = date_str[:4]
@@ -133,6 +135,9 @@ def main():
         d = v["shootDate"] or v["publishDate"]
         if not d:
             continue
+        # 撮影日がなく、帰国(2025-06-28)より後に公開した動画は「その日」が分からないので入れない
+        if not v["shootDate"] and d > LAST_DAY:
+            continue
         by_day[d[5:7] + "-" + d[8:10]].append(v)
 
     month_pills = "\n".join(
@@ -152,7 +157,7 @@ def main():
         months_html.append(MONTH_TMPL.format(month=m, days=day_rows))
         print(f"{m}月: {len(days_in_month)}日")
 
-    out_html = HEAD.format(site_header_html=site_header("", "記念日カレンダー"), site_footer_html=site_footer(""), month_pills=month_pills, months="\n".join(months_html))
+    out_html = HEAD.format(site_header_html=site_header("", "記念日カレンダー"), site_footer_html=site_footer(""), month_pills=month_pills, months="\n".join(months_html), days=len(by_day))
     OUT.write_text(out_html, encoding="utf-8")
     print(f"出力: {OUT} / 収録日数: {len(by_day)}")
 
