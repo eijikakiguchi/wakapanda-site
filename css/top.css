@@ -339,3 +339,18 @@ a { color: inherit; }
 /* ===== 日本語の改行(文節で折り返す・js/phrase.js とセット) ===== */
 w-ph { white-space: nowrap; }
 /* (text-wrap: balance はこのブラウザで落ちたので使わない) */
+
+/* ===== 横のはみ出し止め(2026-11-25) =====
+   回る文字の輪(バッジ)が右へはみ出し、スマホで画面が横に広がって「メニュー」が切れていた。
+   body の hidden だけでは画面の幅が広がるので、html にも clip(上に貼りつくヘッダーをこわさない) */
+html { overflow-x: clip; }
+
+/* ===== ロゴの右のYouTubeアイコン(2026-11-25 えいじさん・style.css と同じ) ===== */
+.brand-wrap { display: inline-flex; align-items: center; gap: 2px; }
+.yt-link {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 10px 8px; margin: -10px 0; border-radius: 10px; line-height: 0;
+}
+.yt-link svg { transition: transform .15s ease; }
+.yt-link:hover svg { transform: scale(1.08); }
+.yt-link:focus-visible { outline: 2px solid var(--kaede); outline-offset: 2px; }

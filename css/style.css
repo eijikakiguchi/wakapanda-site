@@ -916,3 +916,18 @@ html { scroll-padding-top: 84px; }
 @media (prefers-reduced-motion: reduce) {
   .video-card, .video-card:nth-child(n), .hamake-card { transform: none; }
 }
+
+/* ===== 横のはみ出し止め(2026-11-25) =====
+   回る文字の輪(バッジ)が右へはみ出し、スマホで画面が横に広がって「メニュー」が切れていた。
+   clip は hidden とちがい、上に貼りつくヘッダー(sticky)をこわさない */
+html, body { overflow-x: clip; }
+
+/* ===== ロゴの右のYouTubeアイコン(2026-11-25 えいじさん) ===== */
+.brand-wrap { display: inline-flex; align-items: center; gap: 2px; }
+.yt-link {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 10px 8px; margin: -10px 0; border-radius: 10px; line-height: 0;
+}
+.yt-link svg { transition: transform .15s ease; }
+.yt-link:hover svg { transform: scale(1.08); }
+.yt-link:focus-visible { outline: 2px solid var(--kaede); outline-offset: 2px; }

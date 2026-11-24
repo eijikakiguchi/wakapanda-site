@@ -181,7 +181,7 @@
     resizeTimer = setTimeout(() => { if (!data) return; pop.hidden = true; if (done) render(); else measure(); }, 120);
   });
 
-  const minWait = new Promise((ok) => setTimeout(ok, reduce ? 0 : 900));
+  const minWait = new Promise((ok) => setTimeout(ok, 900));
   Promise.all([
     fetch("data/mosaic.json").then((r) => r.json()),
     loadImg("img/top/mosaic.webp"),
@@ -194,7 +194,7 @@
     loader.classList.add("is-done");
     // 文字(Webフォント)が入ったら、大きさを測り直す
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (done) render(); else measure(); });
-    if (reduce) { finish(); return; }
+    // オープニングは「視差効果を減らす」の人にも同じものを出す(2026-11-25 えいじさん裁定・SKIPで飛ばせる)
     t0 = performance.now();
     requestAnimationFrame(frame);
   }).catch(() => {
