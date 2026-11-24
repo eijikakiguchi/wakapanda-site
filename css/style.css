@@ -705,3 +705,214 @@ a:hover { color: var(--kaede); }
   .panda-face, .hero-icon { animation: none; }
   .btn, .video-card, .hamake-card { transition: none; }
 }
+
+/* ===== 日本語の改行(文節で折り返す・js/phrase.js とセット) ===== */
+w-ph { white-space: nowrap; }
+/* (text-wrap: balance はこのブラウザで落ちたので使わない) */
+
+/* =====================================================================
+   紙の雰囲気(2026-11-24・トップの見本 css/top.css にそろえる)
+   ここから下が上の設定を上書きする。色・紙・ヘッダー・カード・ページごとの飾り。
+   ===================================================================== */
+:root {
+  --paper: #F3EBDD;          /* 紙(トップの --kami) */
+  --paper-dim: #E8DCC6;
+  --fur: #E8DCC6;
+  --kami-light: #FAF6EE;     /* 便せん */
+  --sumi: #2B2620;
+  --sumi-soft: #5A5046;
+  --line: rgba(43, 38, 32, 0.16);
+  --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35  0 0 0 0 .28  0 0 0 0 .2  0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --paper-shadow: 0 1px 0 var(--line), 0 14px 30px -22px rgba(43, 38, 32, .6);
+}
+body { background-color: var(--paper); background-image: var(--noise); line-height: 1.95; }
+a { color: var(--sasa-deep); }
+
+/* ---- ヘッダー(トップと同じ形) ---- */
+.site-header {
+  position: sticky; top: 0; z-index: 30;
+  flex-direction: row; align-items: center;
+  padding: 14px clamp(16px, 4vw, 40px);
+  background: color-mix(in srgb, var(--paper) 92%, transparent);
+  border-bottom: 1px dashed var(--line);
+  backdrop-filter: blur(6px);
+}
+.site-header.is-scrolled { box-shadow: 0 10px 24px -22px rgba(43, 38, 32, .7); }
+.brand { letter-spacing: .06em; }
+.brand-ears { display: none; }
+.site-nav { font-family: var(--font-display); font-weight: 700; }
+.site-nav a { color: var(--sumi); padding: 4px 2px; border-bottom: 2px solid transparent; }
+.site-nav a:hover { color: var(--sumi); border-bottom-color: var(--kaede); }
+.site-nav a[aria-current="page"] { border-bottom-color: var(--sasa); }
+.menu-btn { display: none; }
+@media (max-width: 760px) {
+  .site-header { flex-direction: row; align-items: center; }
+  .menu-btn {
+    display: inline-block; font: 700 .85rem var(--font-display); letter-spacing: .1em;
+    background: var(--kami-light); border: 1px solid var(--line); border-radius: 999px; padding: 6px 16px; color: var(--sumi); cursor: pointer;
+  }
+  .site-nav {
+    position: absolute; top: 100%; left: 12px; right: 12px; display: none;
+    flex-direction: column; gap: 0; padding: 8px 18px;
+    background: var(--kami-light); border-radius: 16px; box-shadow: 0 18px 40px -20px rgba(43, 38, 32, .6);
+  }
+  .site-nav.is-open { display: flex; }
+  .site-nav a { padding: 10px 0; border-bottom: 1px dashed var(--line); }
+  .site-nav a:last-child { border-bottom: 0; }
+}
+
+/* ---- 見出し(下線のかわりに笹の葉) ---- */
+.section-head h2, .page h1, .hero-title { letter-spacing: .06em; }
+.section-head h2::after, .page h2::after {
+  width: 24px; height: 10px; margin-top: 10px; border-radius: 0 100% 0 100%;
+  background: var(--sasa); opacity: .8; transform: rotate(-28deg); transform-origin: left center;
+}
+.hero-title em { background: none; color: var(--kaede); }
+.hero-eyebrow { color: var(--sumi-soft); letter-spacing: .2em; }
+
+/* ---- 帯の色ちがい(紙を1枚かさねたように) ---- */
+.section-fur {
+  background-color: var(--paper-dim); background-image: var(--noise);
+  border-top: 1px dashed var(--line); border-bottom: 1px dashed var(--line);
+}
+
+/* ---- ボタン(トップと同じ) ---- */
+.btn { font-family: var(--font-display); letter-spacing: .06em; }
+.btn-primary { background: var(--sumi); color: var(--kami-light); box-shadow: none; }
+.btn-primary:hover { background: var(--kaede); color: var(--kami-light); transform: none; }
+.btn-ghost { border: 2px solid var(--sumi); background: transparent; }
+.btn-ghost:hover { transform: none; }
+
+/* ---- 動画カード=白いふちの写真プリント ---- */
+.video-card {
+  background: #fff; border: 0; border-radius: 3px; padding: 8px 8px 0;
+  box-shadow: 0 12px 24px -16px rgba(43, 38, 32, .6);
+}
+.video-card:nth-child(3n+1) { transform: rotate(-.6deg); }
+.video-card:nth-child(3n+3) { transform: rotate(.5deg); }
+.video-card:hover { transform: rotate(0) translateY(-3px); box-shadow: 0 18px 30px -18px rgba(43, 38, 32, .7); }
+.video-card img { border-radius: 1px; height: auto; }
+.calendar-day img { height: auto; }
+html { scroll-padding-top: 84px; }
+.panda-hero-stats { flex-wrap: wrap; gap: 8px 22px; }
+.panda-hero-stats > span { white-space: nowrap; }
+@media (max-width: 560px) {
+  .panda-hero-stats { flex-direction: column; }
+  .panda-hero-stats > span { white-space: normal; }
+}
+.today-banner { margin: 24px max(16px, calc((100% - var(--maxw)) / 2)) 18px; max-width: none; }
+.video-card .video-body { padding: 10px 6px 14px; }
+
+/* ---- 名鑑・特集のカード=便せんにテープ ---- */
+.hamake-card, .meet-card {
+  position: relative; background: var(--kami-light); border: 0; border-radius: 18px;
+  box-shadow: var(--paper-shadow);
+}
+.hamake-card::before {
+  content: ""; position: absolute; top: -10px; left: 50%; width: 74px; height: 22px;
+  transform: translateX(-50%) rotate(-3deg); background: rgba(78, 122, 71, .32);
+}
+.hamake-card:hover { transform: translateY(-3px) rotate(-.6deg); box-shadow: var(--paper-shadow); }
+
+/* ---- 並べ替え・月えらび ---- */
+.sort-group, .month-nav a { background: var(--kami-light); }
+
+/* ---- 個体アルバム・楓浜ものがたり: 頭に切手 ---- */
+.hero-stamp { flex: none; display: grid; justify-items: center; gap: 4px; transform: rotate(-4deg); }
+.hero-stamp .stamp {
+  position: relative; display: block; width: 112px; aspect-ratio: 4 / 5; padding: 7px;
+  filter: drop-shadow(0 6px 8px rgba(43, 38, 32, .3));
+}
+.hero-stamp .stamp::before {
+  content: ""; position: absolute; inset: 0; background: #fff;
+  -webkit-mask: radial-gradient(circle at 4px 4px, transparent 2.6px, #000 3px) -4px -4px / 8px 8px;
+          mask: radial-gradient(circle at 4px 4px, transparent 2.6px, #000 3px) -4px -4px / 8px 8px;
+}
+.hero-stamp .stamp img { position: relative; width: 100%; height: 100%; object-fit: cover; }
+.hero-stamp .stamp-name { font: 700 .78rem var(--font-display); color: var(--sumi-soft); }
+.panda-hero-tag { color: var(--kaede); }
+
+/* ---- 楓浜ものがたり: 章を笹の茎でつなぐ ---- */
+.story-chapters { position: relative; }
+.story-chapters::before {
+  content: ""; position: absolute; left: max(clamp(4px, 2vw, 18px), calc((100% - var(--maxw)) / 2 - 8px)); top: 0; bottom: 0; width: 7px; border-radius: 4px;
+  background: repeating-linear-gradient(to bottom, #7FA672 0 92px, #3A6134 92px 96px, #7FA672 96px 98px);
+  opacity: .45;
+}
+.story-chapters > .section { padding-left: clamp(36px, 6vw, 64px); }
+.story-chapters > .section-fur { background: transparent; border: 0; }
+.chapter-text { max-width: var(--maxw); margin: -14px auto 30px; padding-right: max(0px, calc(100% - 42em)); }
+
+/* ---- 記念日カレンダー: 日めくりの紙 ---- */
+.calendar-month .section-head h2 {
+  font-size: clamp(2.6rem, 8vw, 4rem); line-height: 1;
+  color: transparent; -webkit-text-stroke: 2px var(--sumi);
+}
+.calendar-month .section-head h2::after { display: none; }
+.calendar-day {
+  background: var(--kami-light); border: 0; border-radius: 12px;
+  box-shadow: var(--paper-shadow);
+}
+.calendar-day:hover { box-shadow: 0 16px 28px -20px rgba(43, 38, 32, .7); }
+.cal-date {
+  width: 62px; padding: 14px 0 6px; position: relative;
+  background: #fff; border-radius: 4px; color: var(--sumi);
+  box-shadow: 0 4px 8px -6px rgba(43, 38, 32, .6);
+}
+.cal-date::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 8px;
+  background: var(--kaede); border-radius: 4px 4px 0 0;
+}
+.calendar-day img { border-radius: 3px; }
+.calendar-list { grid-template-columns: minmax(0, 1fr); }
+.calendar-day { min-width: 0; }
+.cal-body h3 { overflow-wrap: anywhere; }
+@media (max-width: 560px) {
+  .calendar-day { gap: 10px; padding: 10px 12px; }
+  .cal-date { width: 50px; font-size: .95rem; }
+  .calendar-day img { width: 84px; }
+  .cal-body w-ph { white-space: normal; }
+}
+
+/* ---- このサイトについて・運営ポリシー: 便せん1枚 ---- */
+.page.letter {
+  position: relative; margin-top: clamp(32px, 6vw, 56px); margin-bottom: clamp(40px, 7vw, 72px);
+  background: var(--kami-light); border-radius: 6px;
+  padding: clamp(36px, 6vw, 56px) clamp(22px, 7vw, 64px);
+  box-shadow: 0 1px 0 var(--line), 0 30px 60px -40px rgba(43, 38, 32, .55);
+}
+.page.letter::before {
+  content: ""; position: absolute; top: -11px; left: 50%; width: 90px; height: 24px;
+  transform: translateX(-50%) rotate(-2deg); background: rgba(192, 92, 73, .26);
+}
+.page.letter h1 { margin-top: 0; text-align: center; }
+
+/* ---- 名場面ページ ---- */
+.bamen-player { border: 8px solid #fff; border-radius: 4px; box-shadow: 0 18px 34px -20px rgba(43, 38, 32, .7); }
+.bamen-facts li { background: var(--kami-light); border: 1px dashed var(--line); }
+.bamen-desc {
+  margin: 0 0 1.6em; padding: 1.2em clamp(18px, 4vw, 34px) .4em;
+  background: var(--kami-light); border-radius: 6px; box-shadow: var(--paper-shadow);
+}
+.bamen-photo { max-width: 520px; }
+.bamen-photo img {
+  border-radius: 0; background: #fff; padding: 8px 8px 24px; transform: rotate(-1.6deg);
+  box-shadow: 0 14px 26px -16px rgba(43, 38, 32, .6);
+}
+.bamen-photo figcaption { margin-top: .8em; }
+.tokushu-qa {
+  background: var(--kami-light); border-radius: 18px; padding: 22px clamp(18px, 4vw, 30px);
+  box-shadow: var(--paper-shadow); margin-bottom: 22px;
+}
+.tokushu-qa:last-child { margin-bottom: 0; }
+.tokushu-qa h2 { margin-top: 0; }
+
+/* ---- フッター(トップと同じ) ---- */
+.site-footer { background: transparent; border-top: 1px dashed var(--line); padding: 36px 16px 48px; font-size: .85rem; color: var(--sumi-soft); }
+.footer-brand { margin: 0 0 8px; color: var(--sumi); }
+.site-footer nav { gap: 6px 18px; font-size: .85rem; }
+.site-footer nav a { color: var(--sumi-soft); }
+
+@media (prefers-reduced-motion: reduce) {
+  .video-card, .video-card:nth-child(n), .hamake-card { transform: none; }
+}

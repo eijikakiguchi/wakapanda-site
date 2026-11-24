@@ -6,6 +6,9 @@ panda/*.html と同じ「先頭60本を静的HTML + 残りをJSON埋め込み」
 import html
 import json
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).parent))
+from site_parts import site_header, site_footer, stamp
 
 BASE = Path(__file__).parent.parent
 ARCHIVE = BASE / "data" / "archive.json"
@@ -40,36 +43,31 @@ HEAD = """<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>名場面集 | 浜家の思い出、ぜんぶここに。</title>
+<title>テーマ別に見る | 浜家の思い出、ぜんぶここに。</title>
 <meta name="description" content="飼育員さんとの攻防、遊び・ハプニング、親子の時間、寝顔・癒し。浜家の動画をテーマ別にまとめました。">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#128060;</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
-<meta property="og:title" content="名場面集 | 浜家の思い出、ぜんぶここに。">
+<script src="js/phrase.js" defer></script>
+<meta property="og:title" content="テーマ別に見る | 浜家の思い出、ぜんぶここに。">
 <meta property="og:description" content="テーマ別に見る、浜家の名場面。">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://wakapanda.com/meiba-shu.html">
+<meta property="og:image" content="https://wakapanda.com/img/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://wakapanda.com/meiba-shu.html">
 </head>
 <body>
 
-<header class="site-header">
-  <a class="brand" href="index.html">
-    <span class="brand-ears" aria-hidden="true"><i></i><i></i></span>
-    和歌ぱんだ
-  </a>
-  <nav class="site-nav" aria-label="ページ内メニュー">
-    <a href="index.html#panda">個体別アルバム</a>
-    <a href="index.html">トップへもどる</a>
-  </nav>
-</header>
+{site_header_html}
 
 <main>
   <section class="hero hero-compact">
     <div class="hero-inner">
-      <p class="hero-eyebrow">横糸</p>
-      <h1 class="hero-title">名場面集</h1>
+      <p class="hero-eyebrow">テーマで振り返る</p>
+      <h1 class="hero-title">テーマ別に見る</h1>
       <p class="hero-lead">個体をまたいで、テーマで浜家の動画を振り返るページです。</p>
     </div>
   </section>
@@ -77,15 +75,7 @@ HEAD = """<!DOCTYPE html>
 {sections}
 </main>
 
-<footer class="site-footer">
-  <p class="footer-brand">和歌ぱんだ &#128060; wakapanda.com</p>
-  <nav aria-label="フッターメニュー">
-    <a href="about.html">このサイトについて</a>
-    <a href="policy.html">運営ポリシー</a>
-    <a href="https://www.youtube.com/channel/UCfALH0tKUgs-XsL-Xhwvj6A" target="_blank" rel="noopener">YouTube</a>
-  </nav>
-  <p class="footer-copy">&copy; 和歌ぱんだ &mdash; 掲載の映像・写真はすべて運営者が撮影したものです。</p>
-</footer>
+{site_footer_html}
 
 <script src="js/panda.js"></script>
 </body>
@@ -161,7 +151,7 @@ def main():
         ))
         print(f"{theme['title']}: {len(videos)}本")
 
-    out_html = HEAD.format(sections="\n".join(sections))
+    out_html = HEAD.format(site_header_html=site_header("", "テーマ別に見る"), site_footer_html=site_footer(""), sections="\n".join(sections))
     OUT.write_text(out_html, encoding="utf-8")
     print(f"出力: {OUT}")
 

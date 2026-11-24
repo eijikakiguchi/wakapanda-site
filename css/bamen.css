@@ -1,0 +1,94 @@
+/* ===== 名場面ページ・特集ページ(2026-11-24) ===== */
+.bamen { max-width: 820px; }
+
+.bamen-crumb {
+  margin: 0 0 .4em;
+  font-size: 14px;
+  color: var(--sumi-soft);
+}
+
+.bamen-title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(26px, 4.4vw, 38px);
+  line-height: 1.4;
+  margin: 0 0 .5em;
+}
+
+.bamen-lead {
+  font-size: 18px;
+  margin: 0 0 1.2em;
+}
+
+.bamen-player {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--sumi);
+}
+.bamen-player iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.bamen-start {
+  margin: .6em 0 1.4em;
+  font-size: 15px;
+  color: var(--sumi-soft);
+}
+
+.bamen-facts {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.4em;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+}
+.bamen-facts li {
+  background: var(--paper-dim);
+  border-radius: 999px;
+  padding: 4px 14px;
+  font-size: 15px;
+}
+.bamen-facts li span {
+  color: var(--sumi-soft);
+  margin-right: .5em;
+  font-size: 14px;
+}
+
+.bamen-desc p { margin: 0 0 1em; font-size: 17px; }
+
+.bamen-actions { margin: 1.6em 0 .8em; }
+
+.bamen-source {
+  font-size: 14px;
+  color: var(--sumi-soft);
+}
+
+.tokushu-body { max-width: 820px; }
+.tokushu-qa h2 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  margin: 1.6em 0 .4em;
+}
+.tokushu-qa:first-child h2 { margin-top: 0; }
+.tokushu-qa p { margin: 0 0 1em; font-size: 17px; }
+
+.bamen-photo { margin: 1.4em 0; }
+.bamen-photo img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  display: block;
+}
+.bamen-photo figcaption {
+  font-size: 14px;
+  color: var(--sumi-soft);
+  margin-top: .4em;
+}
+.bamen-actions { display: flex; flex-wrap: wrap; gap: 10px; }

@@ -10,6 +10,9 @@ data/archive.json から「楓浜ものがたり」(fuuhin-monogatari.html)を�
 import html
 import json
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).parent))
+from site_parts import site_header, site_footer, stamp
 
 BASE = Path(__file__).parent.parent
 ARCHIVE = BASE / "data" / "archive.json"
@@ -76,23 +79,18 @@ HEAD = """<!DOCTYPE html>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<script src="js/phrase.js" defer></script>
 <meta property="og:title" content="楓浜ものがたり | 浜家の思い出、ぜんぶここに。">
 <meta property="og:description" content="誕生から旅立ちまで、楓浜の歩みを章立てで振り返ります。">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://wakapanda.com/fuuhin-monogatari.html">
+<meta property="og:image" content="https://wakapanda.com/img/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://wakapanda.com/fuuhin-monogatari.html">
 </head>
 <body>
 
-<header class="site-header">
-  <a class="brand" href="index.html">
-    <span class="brand-ears" aria-hidden="true"><i></i><i></i></span>
-    和歌ぱんだ
-  </a>
-  <nav class="site-nav" aria-label="ページ内メニュー">
-    <a href="index.html#panda">個体別アルバム</a>
-    <a href="index.html">トップへもどる</a>
-  </nav>
-</header>
+{site_header_html}
 
 <main>
 
@@ -108,19 +106,13 @@ HEAD = """<!DOCTYPE html>
     </div>
   </section>
 
+<div class="story-chapters">
 {chapters}
+</div>
 
 </main>
 
-<footer class="site-footer">
-  <p class="footer-brand">和歌ぱんだ &#128060; wakapanda.com</p>
-  <nav aria-label="フッターメニュー">
-    <a href="about.html">このサイトについて</a>
-    <a href="policy.html">運営ポリシー</a>
-    <a href="https://www.youtube.com/channel/UCfALH0tKUgs-XsL-Xhwvj6A" target="_blank" rel="noopener">YouTube</a>
-  </nav>
-  <p class="footer-copy">&copy; 和歌ぱんだ &mdash; 掲載の映像・写真はすべて運営者が撮影したものです。</p>
-</footer>
+{site_footer_html}
 
 </body>
 </html>
@@ -166,22 +158,6 @@ def card_html(v):
     )
 
 
-CSS_FACE = """    <div class="panda-face" aria-hidden="true">
-      <i class="ear ear-l"></i><i class="ear ear-r"></i>
-      <i class="eye eye-l"></i><i class="eye eye-r"></i>
-      <i class="nose"></i>
-    </div>"""
-
-
-def face_html():
-    # img/panda/fuuhin.png(jpg/webp)があればイラストを使う(build_panda_pages.pyと同じ約束)
-    for ext in ("png", "jpg", "webp"):
-        if (BASE / "img" / "panda" / f"fuuhin.{ext}").exists():
-            return (f'    <img class="panda-illust" src="img/panda/fuuhin.{ext}" '
-                    f'alt="楓浜のイラスト" width="120" height="120">')
-    return CSS_FACE
-
-
 def main():
     archive = json.loads(ARCHIVE.read_text(encoding="utf-8"))
     fu = [v for v in archive if "楓浜" in v["individuals"] and v["type"] == "通常"]
@@ -205,7 +181,7 @@ def main():
         ))
         print(f"{ch['title']}: {len(chunk)}本中{len(picks)}本を掲載")
 
-    out_html = HEAD.format(chapters="\n".join(chapters_html), face_html=face_html())
+    out_html = HEAD.format(site_header_html=site_header("", "楓浜ものがたり"), site_footer_html=site_footer(""), chapters="\n".join(chapters_html), face_html=stamp("", "fuuhin", ""))
     OUT.write_text(out_html, encoding="utf-8")
     print(f"出力: {OUT}")
 

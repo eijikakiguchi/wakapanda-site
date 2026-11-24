@@ -10,32 +10,36 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/style.css">
+<script src="../js/phrase.js" defer></script>
 <meta property="og:title" content="桃浜(とうひん) | 浜家の思い出、ぜんぶここに。">
 <meta property="og:description" content="桃浜の動画を43本、撮影日順にまとめました。">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://wakapanda.com/panda/touhin.html">
+<meta property="og:image" content="https://wakapanda.com/img/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://wakapanda.com/panda/touhin.html">
 </head>
 <body>
 
+<noscript><style>.site-nav{display:flex !important;position:static !important;box-shadow:none !important;flex-wrap:wrap}.menu-btn{display:none !important}.site-header{flex-wrap:wrap}</style></noscript>
 <header class="site-header">
-  <a class="brand" href="../index.html">
-    <span class="brand-ears" aria-hidden="true"><i></i><i></i></span>
-    和歌ぱんだ
-  </a>
-  <nav class="site-nav" aria-label="ページ内メニュー">
-    <a href="../index.html#panda">個体別アルバム</a>
-    <a href="../index.html">トップへもどる</a>
+  <a class="brand" href="../index.html">和歌ぱんだ</a>
+  <button class="menu-btn" id="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav">メニュー</button>
+  <nav class="site-nav" id="site-nav" aria-label="サイトのメニュー">
+    <a href="../bamen/">名場面</a>
+    <a href="../index.html#nenpyo">年表</a>
+    <a href="../index.html#album" aria-current="page">個体別アルバム</a>
+    <a href="../meiba-shu.html">テーマ別に見る</a>
+    <a href="../fuuhin-monogatari.html">楓浜ものがたり</a>
+    <a href="../kinenbi-calendar.html">記念日カレンダー</a>
+    <a href="../about.html">このサイトについて</a>
   </nav>
 </header>
 
 <main data-panda-page>
 
   <section class="panda-hero">
-    <div class="panda-face" aria-hidden="true">
-      <i class="ear ear-l"></i><i class="ear ear-r"></i>
-      <i class="eye eye-l"></i><i class="eye eye-r"></i>
-      <i class="nose"></i>
-    </div>
+<div class="hero-stamp" aria-hidden="true"><span class="stamp"><img src="../img/top/peek/touhin.jpg" alt="" width="360" height="360"></span></div>
     <div class="panda-hero-body">
       <h1 class="panda-hero-name">桃浜<span class="yomi">とうひん</span></h1>
       <span class="panda-hero-tag">桜浜と双子の姉妹</span>
@@ -111,14 +115,15 @@
 </main>
 
 <footer class="site-footer">
-  <p class="footer-brand">和歌ぱんだ &#128060; wakapanda.com</p>
+  <p class="footer-brand">和歌ぱんだ wakapanda.com</p>
   <nav aria-label="フッターメニュー">
     <a href="../about.html">このサイトについて</a>
     <a href="../policy.html">運営ポリシー</a>
     <a href="https://www.youtube.com/channel/UCfALH0tKUgs-XsL-Xhwvj6A" target="_blank" rel="noopener">YouTube</a>
   </nav>
-  <p class="footer-copy">&copy; 和歌ぱんだ &mdash; 掲載の映像・写真はすべて運営者が撮影したものです。</p>
+  <p class="footer-copy">© 和歌ぱんだ — 掲載の映像・写真はすべて運営者が撮影したものです。</p>
 </footer>
+<script src="../js/site.js" defer></script>
 
 <script src="../js/panda.js"></script>
 </body>

@@ -8,6 +8,9 @@ data/archive.json から記念日カレンダー(kinenbi-calendar.html)を生成
 import html
 import json
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).parent))
+from site_parts import site_header, site_footer, stamp
 from collections import defaultdict
 
 BASE = Path(__file__).parent.parent
@@ -28,28 +31,23 @@ HEAD = """<!DOCTYPE html>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<script src="js/phrase.js" defer></script>
 <meta property="og:title" content="記念日カレンダー | 浜家の思い出、ぜんぶここに。">
 <meta property="og:description" content="今日は何年前のこの日。浜家の動画を月日ごとに振り返ります。">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://wakapanda.com/kinenbi-calendar.html">
+<meta property="og:image" content="https://wakapanda.com/img/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://wakapanda.com/kinenbi-calendar.html">
 </head>
 <body>
 
-<header class="site-header">
-  <a class="brand" href="index.html">
-    <span class="brand-ears" aria-hidden="true"><i></i><i></i></span>
-    和歌ぱんだ
-  </a>
-  <nav class="site-nav" aria-label="ページ内メニュー">
-    <a href="index.html#panda">個体別アルバム</a>
-    <a href="index.html">トップへもどる</a>
-  </nav>
-</header>
+{site_header_html}
 
 <main>
   <section class="hero hero-compact">
     <div class="hero-inner">
-      <p class="hero-eyebrow">再訪装置</p>
+      <p class="hero-eyebrow">今日は何の日</p>
       <h1 class="hero-title">記念日<br><em>カレンダー</em></h1>
       <p class="hero-lead">
         「今日は何年前のこの日」。撮影日(なければ公開日)を頼りに、365日ぶん束ねました。
@@ -71,15 +69,7 @@ HEAD = """<!DOCTYPE html>
   </div>
 </main>
 
-<footer class="site-footer">
-  <p class="footer-brand">和歌ぱんだ &#128060; wakapanda.com</p>
-  <nav aria-label="フッターメニュー">
-    <a href="about.html">このサイトについて</a>
-    <a href="policy.html">運営ポリシー</a>
-    <a href="https://www.youtube.com/channel/UCfALH0tKUgs-XsL-Xhwvj6A" target="_blank" rel="noopener">YouTube</a>
-  </nav>
-  <p class="footer-copy">&copy; 和歌ぱんだ &mdash; 掲載の映像・写真はすべて運営者が撮影したものです。</p>
-</footer>
+{site_footer_html}
 
 <script>
 (function () {{
@@ -162,7 +152,7 @@ def main():
         months_html.append(MONTH_TMPL.format(month=m, days=day_rows))
         print(f"{m}月: {len(days_in_month)}日")
 
-    out_html = HEAD.format(month_pills=month_pills, months="\n".join(months_html))
+    out_html = HEAD.format(site_header_html=site_header("", "記念日カレンダー"), site_footer_html=site_footer(""), month_pills=month_pills, months="\n".join(months_html))
     OUT.write_text(out_html, encoding="utf-8")
     print(f"出力: {OUT} / 収録日数: {len(by_day)}")
 
