@@ -358,3 +358,20 @@ html { overflow-x: clip; }
 }
 .yt-link:hover img { transform: scale(1.08); }
 .yt-link:focus-visible { outline: 2px solid var(--kaede); outline-offset: 2px; }
+
+/* ===== メニューのボタン化を広げる(2026-11-25) =====
+   761〜1050pxでメニューが2行になり、トップの絵に重なっていた→1行に収まらない幅はスマホと同じボタンに */
+@media (min-width: 761px) and (max-width: 1080px) {
+  .menu-btn {
+    display: inline-block; font: 700 .85rem var(--font-maru); letter-spacing: .1em;
+    background: var(--kami-light); border: 1px solid var(--line); border-radius: 999px; padding: 6px 16px; color: var(--sumi);
+  }
+  .site-nav {
+    position: absolute; top: 100%; left: 12px; right: 12px; display: none;
+    flex-direction: column; gap: 0; padding: 8px 18px;
+    background: var(--kami-light); border-radius: 16px; box-shadow: 0 18px 40px -20px rgba(43,38,32,.6);
+  }
+  .site-nav.is-open { display: flex; }
+  .site-nav a { padding: 10px 0; border-bottom: 1px dashed var(--line); }
+  .site-nav a:last-child { border-bottom: 0; }
+}

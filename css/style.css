@@ -745,7 +745,8 @@ a { color: var(--sasa-deep); }
 .site-nav a:hover { color: var(--sumi); border-bottom-color: var(--kaede); }
 .site-nav a[aria-current="page"] { border-bottom-color: var(--sasa); }
 .menu-btn { display: none; }
-@media (max-width: 760px) {
+/* 1行に収まらない幅(〜1080px)はメニューをボタンにまとめる(2026-11-25・761〜1050pxで2行になりヘッダーが太くなっていた) */
+@media (max-width: 1080px) {
   .site-header { flex-direction: row; align-items: center; }
   .menu-btn {
     display: inline-block; font: 700 .85rem var(--font-display); letter-spacing: .1em;
