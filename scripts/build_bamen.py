@@ -174,12 +174,14 @@ def foot(depth):
 
 def scene_card(s, depth):
     up = "../" * depth
-    name = "・".join(s["pandas"])
+    # 親子の場面は楓浜を先に(表記と月齢をそろえる・2026-11-25)
+    ps = sorted(s["pandas"], key=lambda p: p != "楓浜")
+    name = "・".join(ps)
     return (
         f'      <a class="video-card bamen-card" href="{up}bamen/{s["id"]}.html">'
         f'<img src="{thumb(s, up)}" alt="" loading="lazy" width="320" height="180">'
         f'<div class="video-body"><h3>{e(s["title"])}</h3>'
-        f'<p class="video-meta"><span>{e(date_label(s["date"]))}</span><span>{e(name)} {e(age_label(s["pandas"][0], s["date"]))}</span></p>'
+        f'<p class="video-meta"><span>{e(date_label(s["date"]))}</span><span>{e(name)} {e(age_label(ps[0], s["date"]))}</span></p>'
         f"</div></a>"
     )
 
@@ -332,17 +334,37 @@ def index_page(scenes, tokushu, by_id):
         f'      <a class="hamake-card" href="../tokushu/{t["key"]}.html"><span class="hamake-year">特集</span><h3>{e(t["short"])}</h3><p>{e(t["cardText"])}</p></a>\n'
         for t in tokushu
     )
-    groups = {}
-    for s in scenes:
-        groups.setdefault(s["pandas"][0], []).append(s)
-    sections = ""
+    # 欄の分け方(2026-11-25 えいじさん裁定): 楓浜→良浜ママと楓浜(親子)→ほかの子は生まれた順。場面の多い楓浜を先頭に
+    groups = [("fuuhin", "楓浜(ふうひん)の名場面", "楓浜", ["fuuhin"], [x for x in scenes if x["pandas"] == ["楓浜"]])]
+    groups.append(("oyako", "良浜(らうひん)ママと楓浜(ふうひん)", "良浜ママと楓浜", ["rauhin", "fuuhin"],
+                   [x for x in scenes if set(x["pandas"]) == {"良浜", "楓浜"}]))
     for name in PANDAS:
-        if name not in groups:
+        if name == "楓浜":
             continue
-        g = sorted(groups[name], key=lambda x: (x["date"], x["id"]))
+        g = [x for x in scenes if x["pandas"] == [name]]
+        groups.append((PANDAS[name][2], f"{name}({PANDAS[name][0]})の名場面", name, [PANDAS[name][2]], g))
+    placed = sum(len(g[4]) for g in groups)
+    assert placed == len(scenes), f"欄に入らない場面がある: {placed}/{len(scenes)}"
+    groups = [g for g in groups if g[4]]
+    jump = "".join(
+        f'      <a class="bamen-jump-btn" href="#{key}"><span class="bamen-jump-faces">'
+        + "".join(f'<img src="../img/top/peek/{f}.jpg" alt="" width="44" height="44">' for f in faces)
+        + f'</span><span class="bamen-jump-name">{e(label)}</span><span class="bamen-jump-count">{len(g)}場面</span></a>\n'
+        for key, _, label, faces, g in groups
+    )
+    sections = ""
+    for key, title, _, _, g in groups:
+        g = sorted(g, key=lambda x: (x["date"], x["id"]))
+        years = sorted({x["date"][:4] for x in g})
+        inner = ""
+        for y in years:
+            gy = [x for x in g if x["date"][:4] == y]
+            if len(years) > 1:
+                inner += f'    <h3 class="bamen-year">{y}年<small>{len(gy)}場面</small></h3>\n'
+            inner += '    <div class="video-grid">\n' + "\n".join(scene_card(x, 1) for x in gy) + "\n    </div>\n"
         sections += (
-            f'  <section class="section section-fur">\n    <div class="section-head"><h2>{e(name)}({e(PANDAS[name][0])})の名場面</h2><p>{len(g)}場面・撮影日の古い順。</p></div>\n'
-            f'    <div class="video-grid">\n' + "\n".join(scene_card(s, 1) for s in g) + "\n    </div>\n  </section>\n"
+            f'  <section class="section section-fur bamen-group" id="{key}">\n    <div class="section-head"><h2>{e(title)}</h2><p>{len(g)}場面・撮影日の古い順。</p></div>\n'
+            + inner + "  </section>\n"
         )
     og = f'<meta property="og:image" content="{thumb_abs(scenes[0])}">\n'
     ld = breadcrumb([("トップ", "index.html"), ("名場面", "bamen/")])
@@ -353,6 +375,11 @@ def index_page(scenes, tokushu, by_id):
       <p class="hero-lead">YouTubeで公開した動画から、1場面ずつ取り出しました。押すと、その場面の秒から再生できます。</p>
     </div>
   </section>
+  <nav class="section bamen-jump" aria-label="パンダで選ぶ">
+    <p class="bamen-jump-title">パンダで選ぶ</p>
+    <div class="bamen-jump-list">
+{jump}    </div>
+  </nav>
   <section class="section">
     <div class="section-head"><h2>特集</h2></div>
     <div class="hamake-grid">
