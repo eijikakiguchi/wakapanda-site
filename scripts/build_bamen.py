@@ -419,6 +419,17 @@ def sitemap():
     return len(urls)
 
 
+def top_count(n):
+    """トップのボタン「名場面 ◯場面を見る」の数を、いまの場面数に書き換える"""
+    import re
+    p = BASE / "index.html"
+    s = p.read_text(encoding="utf-8")
+    s2, k = re.subn(r'(<span class="bamen-count">)\d+(</span>)', rf"\g<1>{n}\g<2>", s)
+    assert k == 1, "トップのボタンの数の場所が見つからない"
+    if s2 != s:
+        p.write_text(s2, encoding="utf-8")
+
+
 def main():
     scenes = json.loads(BAMEN.read_text(encoding="utf-8"))
     tokushu = json.loads(TOKUSHU.read_text(encoding="utf-8"))
@@ -439,6 +450,7 @@ def main():
     for t in tokushu:
         (BASE / "tokushu" / f"{t['key']}.html").write_text(tokushu_page(t, by_id), encoding="utf-8")
     (BASE / "bamen" / "index.html").write_text(index_page(scenes, tokushu, by_id), encoding="utf-8")
+    top_count(len(scenes))
     n = sitemap()
     print(f"場面ページ {len(scenes)}枚・特集 {len(tokushu)}本・一覧1枚・sitemap {n}件を出力")
 

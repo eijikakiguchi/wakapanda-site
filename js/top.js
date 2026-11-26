@@ -196,6 +196,7 @@
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (done) render(); else measure(); });
     // オープニングは「視差効果を減らす」の人にも同じものを出す(2026-11-25 えいじさん裁定・SKIPで飛ばせる)
     t0 = performance.now();
+    try { if (sessionStorage.getItem("wkp-op")) skipAt = t0; sessionStorage.setItem("wkp-op", "1"); } catch (e) {}
     requestAnimationFrame(frame);
   }).catch(() => {
     // 読み込めなくても文字は見えるように

@@ -84,19 +84,20 @@ a { color: inherit; }
   position: relative; z-index: 2; align-self: end;
   text-align: center; max-width: 640px;
   pointer-events: none;
-  opacity: 0; transform: translateY(16px);
-  transition: opacity 1s ease, transform 1s ease;
 }
+.hero-copy { background: rgba(243,235,221,.94); border-radius: 18px; padding: 14px 18px 10px; box-shadow: 0 0 24px 18px rgba(243,235,221,.94); }
+.hero.is-done .hero-copy { background: transparent; box-shadow: none; transition: background .8s, box-shadow .8s; }
+.hero-cta { pointer-events: auto; display: inline-block; margin: 14px 0 4px; padding: 14px 30px; border-radius: 999px; background: var(--sumi); color: #fff; font: 700 1.05rem var(--font-maru); letter-spacing: .06em; text-decoration: none; box-shadow: 0 6px 16px rgba(0,0,0,.15); }
 .hero.is-done .hero-copy { opacity: 1; transform: none; }
 .hero-eyebrow { margin: 0 0 6px; font-family: var(--font-maru); font-weight: 700; font-size: .85rem; letter-spacing: .2em; color: var(--sumi-soft); }
 .hero-title { margin: 0; font-family: var(--font-maru); font-weight: 900; font-size: clamp(1.9rem, 5.2vw, 3.1rem); line-height: 1.35; letter-spacing: .04em; }
 .hero-note { margin: 12px 0 0; font-size: .9rem; color: var(--sumi-soft); line-height: 1.8; }
 .hero-note strong { color: var(--sumi); }
-.hero-tip { display: block; font-size: .8rem; }
+.hero-tip { margin: 6px 0 0; font-size: .82rem; color: var(--sumi-soft); }
 .skip {
   position: absolute; right: clamp(16px, 4vw, 40px); bottom: 28px; z-index: 3;
-  font: 700 .85rem var(--font-maru); letter-spacing: .1em;
-  background: none; border: 0; color: var(--sumi-soft); cursor: pointer; padding: 8px 4px;
+  font: 700 1rem var(--font-maru); letter-spacing: .1em;
+  background: rgba(255,255,255,.85); border: 1.5px solid var(--sumi-soft); border-radius: 999px; color: var(--sumi); cursor: pointer; padding: 8px 16px;
 }
 .hero.is-done .skip { display: none; }
 .scroll-cue {
@@ -375,3 +376,6 @@ html { overflow-x: clip; }
   .site-nav a { padding: 10px 0; border-bottom: 1px dashed var(--line); }
   .site-nav a:last-child { border-bottom: 0; }
 }
+
+.stamp-link { display: grid; justify-items: center; gap: inherit; text-decoration: none; color: inherit; }
+.stamps-note { margin: 10px auto 0; max-width: 300px; text-align: center; font-size: .82rem; color: var(--sumi-soft); line-height: 1.7; }
