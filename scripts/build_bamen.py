@@ -10,6 +10,8 @@ data/bamen.json と data/tokushu.json から、名場面ページ(bamen/<id>.htm
 - 場面IDは「撮影日-ひとこと」で一度決めたら変えない(動画を上げ直しても URL が残るように)
 - 1場面1ページ。同じ場面が入っている動画が複数あれば videos に並べる(先頭が埋め込みに使う動画)
 - 個体が確定していない場面は載せない(data 側で pandas に確定名だけ入れる)
+- 歌の動画(MV)は場面ページにしない。元の場面の songs に {id,title,start,publish} を入れ、公開日時を過ぎたものだけ
+  「この場面が出てくる歌」として出す(予約中のMVは公開日に作り直すと出る)
 - 年齢・撮影日の表記・場面の長さ・関連場面・特集の期間はここで計算する(手で二重に持たない)
 """
 import datetime as dt
@@ -84,6 +86,11 @@ def mmss(sec):
 
 def main_video(s):
     return s["videos"][0]
+
+
+def is_public(g):
+    """歌(MV)の公開日時を過ぎているか。予約中のMVへのリンクは出さない"""
+    return dt.datetime.fromisoformat(g["publish"]) <= dt.datetime.now(dt.timezone.utc)
 
 
 def has_photo(s):
@@ -234,6 +241,15 @@ def scene_page(s, scenes, tokushu_of):
         others_html = "    <p class=\"bamen-source\">この場面は、ほかの動画にも入っています: " + "、".join(
             f'<a href="https://www.youtube.com/watch?v={o["id"]}&t={int(o["start"])}s" target="_blank" rel="noopener">{e(o["title"])}</a>'
             for o in others) + "</p>\n"
+
+    # この場面が出てくる歌(MVは場面ページにしない・公開日を過ぎた歌だけ出す・2026-11-26)
+    songs = [g for g in s.get("songs", []) if is_public(g)]
+    songs_html = ""
+    if songs:
+        songs_html = "    <p class=\"bamen-source bamen-song\">&#9835; この場面が出てくる歌: " + "、".join(
+            f'<a href="https://www.youtube.com/watch?v={g["id"]}&t={int(g["start"])}s" target="_blank" rel="noopener">{e(g["title"])}</a>'
+            for g in songs) + "</p>\n"
+    others_html += songs_html
 
     rel = related_of(s, scenes, tokushu_of)
     rel_html = ""
